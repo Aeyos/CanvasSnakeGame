@@ -1,2 +1,0 @@
-# CanvasSnakeGame
-Created with CodeSandbox
