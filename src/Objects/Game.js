@@ -1,6 +1,8 @@
 import Background from "./Background";
 import Snake from "./Snake";
 import Food from "./Food";
+import Scenes from "./Scenes";
+import Button from "./Button";
 
 export default class Game {
   constructor(canvasEl, w, h) {
@@ -44,10 +46,24 @@ export default class Game {
     };
     this.lastPerformanceNow = window.performance.now();
 
+    this.scenes = new Scenes(this);
     this.background = new Background(this);
     this.snake = new Snake(this);
     this.food = new Food(this);
     this.food.add();
+
+    this.setupScenes();
+  };
+
+  setupScenes = () => {
+    const newGameBtn = new Button(this, {
+      color: '#123',
+      pos: { x: 200, y: 200 }
+    });
+    this.scenes.setScene("menu");
+
+    this.scenes.addObject(this.background);
+    this.scenes.addObject(newGameBtn);
   };
 
   loop = () => {
@@ -55,12 +71,9 @@ export default class Game {
       return;
     }
 
-    if (!this.gameOver) {
-      this.game();
-      this.render();
-    } else {
-      this.renderGameOver();
-    }
+    this.game();
+    this.render();
+
     requestAnimationFrame(this.loop);
   };
 
@@ -68,7 +81,7 @@ export default class Game {
     const delta = window.performance.now() - this.lastPerformanceNow;
     this.lastPerformanceNow = window.performance.now();
 
-    this.snake.update(delta);
+    this.scenes.updateAll(delta);
   };
 
   render = () => {
@@ -77,9 +90,11 @@ export default class Game {
     ctx.fillStyle = "#FFF";
     ctx.fillRect(0, 0, this.width, this.height);
 
-    this.background.render(ctx);
-    this.snake.render(ctx);
-    this.food.render(ctx);
+    this.scenes.renderAll(ctx);
+
+    //this.background.render(ctx);
+    //this.snake.render(ctx);
+    //this.food.render(ctx);
   };
 
   renderGameOver = () => {
