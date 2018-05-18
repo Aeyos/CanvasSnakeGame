@@ -22,8 +22,8 @@ export default class Scenes {
   addObject = (o, index, scene = this.currentScene) => {
     const i = index || Object.keys(scene.objects).pop() || 0;
 
-    scene.objects[i] = [...scene.objects[i] || [], o];
-  }
+    scene.objects[i] = [...(scene.objects[i] || []), o];
+  };
 
   setScene = sceneName => {
     const s = this.scenes[sceneName];
@@ -32,10 +32,22 @@ export default class Scenes {
     }
   };
 
+  eventAll = (mouse, keyboard) => {
+    Object.entries(this.currentScene.objects).forEach(a => {
+      a[1].forEach(o => {
+        if (typeof o.event === "function") {
+          o.event(mouse, keyboard);
+        }
+      });
+    });
+  };
+
   updateAll = delta => {
     Object.entries(this.currentScene.objects).forEach(a => {
       a[1].forEach(o => {
-        o.update(delta);
+        if (typeof o.update === "function") {
+          o.update(delta);
+        }
       });
     });
   };
@@ -43,7 +55,9 @@ export default class Scenes {
   renderAll = ctx => {
     Object.entries(this.currentScene.objects).forEach(a => {
       a[1].forEach(o => {
-        o.render(ctx);
+        if (typeof o.render === "function") {
+          o.render(ctx);
+        }
       });
     });
   };

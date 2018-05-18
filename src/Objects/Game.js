@@ -3,6 +3,8 @@ import Snake from "./Snake";
 import Food from "./Food";
 import Scenes from "./Scenes";
 import Button from "./Button";
+import Mouse from "./Utils/Mouse";
+import Keyboard from "./Utils/Keyboard";
 
 export default class Game {
   constructor(canvasEl, w, h) {
@@ -17,12 +19,12 @@ export default class Game {
     this.canvas.width = this.width = w;
     this.canvas.height = this.height = h;
 
-    window.addEventListener("keyup", evt => {
-      const fn = this[`on${evt.key}`];
-      if (typeof fn === "function") {
-        fn.call(this);
-      }
-    });
+    this.focusHackEl = document.createElement("input");
+    this.focusHackEl.style.opacity = 0;
+    this.focusHackEl.style.position = "absolute";
+    this.focusHackEl.style.top = 0;
+
+    document.body.appendChild(this.focusHackEl);
   }
 
   destroy = () => {};
@@ -45,11 +47,14 @@ export default class Game {
       height: this.height / this.mapBlockSize
     };
     this.lastPerformanceNow = window.performance.now();
+    this.time = window.performance.now();
 
     this.scenes = new Scenes(this);
     this.background = new Background(this);
     this.snake = new Snake(this);
     this.food = new Food(this);
+    this.keyboard = new Keyboard(this);
+    this.mouse = new Mouse(this);
     this.food.add();
 
     this.setupScenes();
@@ -57,13 +62,30 @@ export default class Game {
 
   setupScenes = () => {
     const newGameBtn = new Button(this, {
-      color: '#123',
-      pos: { x: 200, y: 200 }
+      bgColor: "#333",
+      fgColor: "#FFF",
+      pos: { x: this.width / 2, y: this.height * 0.35 },
+      text: "New Game"
     });
+    const continueBtn = new Button(this, {
+      bgColor: "#333",
+      fgColor: "#FFF",
+      pos: { x: this.width / 2, y: this.height * 0.45 },
+      text: "Continue"
+    });
+    const optionsBtn = new Button(this, {
+      bgColor: "#333",
+      fgColor: "#FFF",
+      pos: { x: this.width / 2, y: this.height * 0.6 },
+      text: "Options"
+    });
+
     this.scenes.setScene("menu");
 
     this.scenes.addObject(this.background);
     this.scenes.addObject(newGameBtn);
+    this.scenes.addObject(continueBtn);
+    this.scenes.addObject(optionsBtn);
   };
 
   loop = () => {
@@ -71,10 +93,17 @@ export default class Game {
       return;
     }
 
+    this.time = window.performance.now();
+
+    this.events();
     this.game();
     this.render();
 
     requestAnimationFrame(this.loop);
+  };
+
+  events = () => {
+    this.scenes.eventAll(this.mouse, this.keyboard);
   };
 
   game = () => {
@@ -91,10 +120,6 @@ export default class Game {
     ctx.fillRect(0, 0, this.width, this.height);
 
     this.scenes.renderAll(ctx);
-
-    //this.background.render(ctx);
-    //this.snake.render(ctx);
-    //this.food.render(ctx);
   };
 
   renderGameOver = () => {

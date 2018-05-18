@@ -12,12 +12,7 @@ class Canvas extends React.Component {
   };
 
   render() {
-    return (
-      <React.Fragment>
-        <canvas ref={e => (this.canvasEl = e)} />
-        <button onClick={this.restart}>Restart</button>
-      </React.Fragment>
-    );
+    return <canvas ref={e => (this.canvasEl = e)} />;
   }
 }
 
