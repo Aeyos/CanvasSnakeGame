@@ -7,8 +7,8 @@ export default class Food {
 
   add = () => {
     for (let i = 0; i < 100; i++) {
-      const x = Math.floor(Math.random() * this.game.mapSize.width);
-      const y = Math.floor(Math.random() * this.game.mapSize.height);
+      const x = Math.floor(Math.random() * this.scene.getMapSize().width);
+      const y = Math.floor(Math.random() * this.scene.getMapSize().height);
       if (this.scene.isEmpty(x, y)) {
         return this.foods.push([x, y]);
       }
@@ -32,9 +32,12 @@ export default class Food {
   update = delta => {};
 
   render = ctx => {
+    ctx.save();
+    ctx.fillStyle = "#D33";
+    this.scene.drawInMap(ctx);
+
     this.foods.forEach(f => {
       const tfp = this.game.mapBlockSize * 0.25;
-      ctx.fillStyle = "#D33";
       ctx.fillRect(
         f[0] * this.game.mapBlockSize + tfp,
         f[1] * this.game.mapBlockSize + tfp,
@@ -42,5 +45,7 @@ export default class Food {
         tfp * 2
       );
     });
+
+    ctx.restore();
   };
 }

@@ -8,7 +8,7 @@ export default class Snake {
     this.game = game;
     this.scene = scene;
     this.clockMove = 0;
-    this.stepsPerSec = 10;
+    this.stepsPerSec = 9;
     this.speed = 1000 / this.stepsPerSec;
     this.directionBuffer = null;
   }
@@ -37,14 +37,14 @@ export default class Snake {
 
   slither = (x, y) => {
     if (x < 0) {
-      x = this.game.mapSize.width;
-    } else if (x >= this.game.mapSize.width) {
+      x = this.scene.getMapSize().width - 1;
+    } else if (x >= this.scene.getMapSize().width) {
       x = 0;
     }
 
     if (y < 0) {
-      y = this.game.mapSize.height;
-    } else if (y >= this.game.mapSize.height) {
+      y = this.scene.getMapSize().height - 1;
+    } else if (y >= this.scene.getMapSize().height) {
       y = 0;
     }
 
@@ -121,9 +121,12 @@ export default class Snake {
   };
 
   render = ctx => {
+    ctx.save();
+    ctx.fillStyle = "#000";
+    this.scene.drawInMap(ctx);
+
     this.segments.forEach(s => {
       const tfp = this.game.mapBlockSize * 0.25;
-      ctx.fillStyle = "#000";
       ctx.fillRect(
         s[0] * this.game.mapBlockSize + tfp,
         s[1] * this.game.mapBlockSize + tfp,
@@ -131,5 +134,6 @@ export default class Snake {
         tfp * 2
       );
     });
+    ctx.restore();
   };
 }

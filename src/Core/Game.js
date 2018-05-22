@@ -26,6 +26,8 @@ export default class GameEngine {
     this.focusHackEl.style.position = "absolute";
     this.focusHackEl.style.top = 0;
 
+    this.mapBlockSize = 30;
+
     document.body.appendChild(this.focusHackEl);
   }
 
@@ -35,19 +37,13 @@ export default class GameEngine {
   };
 
   bootUp = () => {
-    this.mapBlockSize = 30;
-
-    this.mapSize = {
-      width: this.width / this.mapBlockSize,
-      height: this.height / this.mapBlockSize
-    };
     this.lastPerformanceNow = window.performance.now();
     this.time = window.performance.now();
 
-    this.scenes = new Scenes(this);
-
     this.keyboard = new Keyboard(this);
     this.mouse = new Mouse(this);
+
+    this.scenes = new Scenes(this);
 
     this.setupScenes();
   };
