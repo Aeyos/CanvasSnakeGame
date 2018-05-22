@@ -38,12 +38,12 @@ class Keyboard {
     }
 
     key.timePressed = this.game.time;
-    key.isPressed = false;
+    key.isPressed = true;
   };
 
   outsideEvent = evt => {
     if (evt.target === this.game.focusHackEl) {
-      console.log('inside event keydown',)
+      console.log("inside event keydown");
       evt.preventDefault();
       return false;
     }

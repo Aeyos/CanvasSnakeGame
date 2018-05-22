@@ -1,15 +1,12 @@
 import DIRECTIONS from "../Constants/directions.js";
 
 export default class Snake {
-  constructor(game) {
-    this.segments = [
-      [0, 0],
-      [0, 1],
-      [0, 2]
-    ];
+  constructor(game, scene) {
+    this.segments = [[0, 0], [0, 1], [0, 2]];
     this.points = 0;
     this.direction = 1; // 0,1,2,3 - up, right, down, left
     this.game = game;
+    this.scene = scene;
     this.clockMove = 0;
     this.stepsPerSec = 10;
     this.speed = 1000 / this.stepsPerSec;
@@ -22,12 +19,12 @@ export default class Snake {
   moveLeft = () => this.move(this.segments[0][0] - 1, this.segments[0][1]);
 
   move = (x, y) => {
-    const o = this.game.objectAt(x, y);
+    const o = this.scene.objectAt(x, y);
 
     if (o === "Food") {
       this.eat(x, y);
     } else if (o === "Snake") {
-      this.game.setGameOver(true);
+      this.game.gameOver();
     } else {
       this.slither(x, y);
     }
@@ -35,8 +32,7 @@ export default class Snake {
 
   eat = (x, y) => {
     this.segments.unshift([x, y]);
-    this.game.removeFood(x, y);
-
+    this.scene.removeFood(x, y);
   };
 
   slither = (x, y) => {
@@ -89,6 +85,24 @@ export default class Snake {
       }
     });
     return snake;
+  };
+
+  event = (mouse, keyboard) => {
+    if (keyboard.keyDown("ArrowUp")) {
+      this.faceUp();
+    }
+
+    if (keyboard.keyDown("ArrowRight")) {
+      this.faceRight();
+    }
+
+    if (keyboard.keyDown("ArrowDown")) {
+      this.faceDown();
+    }
+
+    if (keyboard.keyDown("ArrowLeft")) {
+      this.faceLeft();
+    }
   };
 
   update = delta => {

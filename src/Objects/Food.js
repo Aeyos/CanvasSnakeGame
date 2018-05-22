@@ -1,14 +1,15 @@
 export default class Food {
-  constructor(game) {
+  constructor(game, scene) {
     this.foods = [];
     this.game = game;
+    this.scene = scene;
   }
 
   add = () => {
     for (let i = 0; i < 100; i++) {
       const x = Math.floor(Math.random() * this.game.mapSize.width);
       const y = Math.floor(Math.random() * this.game.mapSize.height);
-      if (this.game.isEmpty(x, y)) {
+      if (this.scene.isEmpty(x, y)) {
         return this.foods.push([x, y]);
       }
     }

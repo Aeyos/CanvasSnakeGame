@@ -19,10 +19,11 @@ export default class Scenes {
     this.currentScene = null;
   }
 
-  addObject = (o, index, scene = this.currentScene) => {
-    const i = index || Object.keys(scene.objects).pop() || 0;
+  addObject = (o, index, scene) => {
+    const s = scene ? this.scenes[scene] : this.currentScene;
+    const i = index || Object.keys(s.objects).pop() || 0;
 
-    scene.objects[i] = [...(scene.objects[i] || []), o];
+    s.objects[i] = [...(s.objects[i] || []), o];
   };
 
   setScene = sceneName => {
@@ -30,6 +31,13 @@ export default class Scenes {
     if (s) {
       this.currentScene = s;
     }
+  };
+
+  loadScene = (name, scn) => {
+    this.scenes[name] = {
+      objects: scn.objects,
+      events: scn.events
+    };
   };
 
   eventAll = (mouse, keyboard) => {

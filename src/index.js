@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "react-dom";
 import Hello from "./Hello";
-import Canvas from "./UI/canvas";
+import Canvas from "./canvas";
 
 const styles = {
   fontFamily: "sans-serif",

@@ -1,5 +1,5 @@
 import React from "react";
-import Game from "../Objects/Game";
+import Game from "./Core/Game";
 
 class Canvas extends React.Component {
   componentDidMount() {
@@ -12,7 +12,18 @@ class Canvas extends React.Component {
   };
 
   render() {
-    return <canvas ref={e => (this.canvasEl = e)} />;
+    return (
+      <div>
+        <canvas ref={e => (this.canvasEl = e)} />
+        <button
+          onClick={() => {
+            this.game.gameOver();
+          }}
+        >
+          LOSE
+        </button>
+      </div>
+    );
   }
 }
 

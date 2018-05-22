@@ -12,6 +12,9 @@ class Mouse {
     window.onmouseup = this.handleMouseUp;
     window.onmousemove = this.handleMouseMove;
     window.oncontextmenu = this.handleContextMenu;
+
+    this.x = 0;
+    this.y = 0;
   }
 
   createOrGetKey = which => {
@@ -26,12 +29,22 @@ class Mouse {
     return this[which];
   };
 
+  afterHandle = () => {
+    const left = this.createOrGetKey("left");
+    if (left) left.clicked = false;
+    const middle = this.createOrGetKey("middle");
+    if (middle) middle.clicked = false;
+    const right = this.createOrGetKey("right");
+    if (right) right.clicked = false;
+  };
+
   handleMouseUp = evt => {
     if (this.outsideEvent(evt)) return;
     const key = this.createOrGetKey(MOUSE_KEYS[evt.button]);
 
     key.timeReleased = this.game.time;
     key.isPressed = false;
+    key.clicked = true;
 
     evt.preventDefault();
     return false;
@@ -49,13 +62,22 @@ class Mouse {
     }
 
     key.timePressed = this.game.time;
-    key.isPressed = false;
+    key.isPressed = true;
 
     evt.preventDefault();
     return false;
   };
 
-  handleMouseMove = evt => {};
+  handleMouseMove = evt => {
+    if (this.outsideEvent(evt)) {
+      this.x = -Infinity;
+      this.y = -Infinity;
+      return;
+    }
+
+    this.x = evt.offsetX;
+    this.y = evt.offsetY;
+  };
 
   handleContextMenu = evt => this.outsideEvent(evt);
 

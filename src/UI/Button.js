@@ -1,5 +1,5 @@
-import Color from "./Utils/Color";
-import Positioning from "./Utils/Positioning";
+import Color from "../Utils/Color";
+import Positioning from "../Utils/Positioning";
 
 class Button {
   constructor(game, args) {
@@ -12,6 +12,8 @@ class Button {
     this.positioning = args.positioning || Positioning.CC;
     this.text = args.text || "";
     this.fontSize = args.fontSize || 25;
+    this.bloat = 1;
+    this.onAction = args.onAction || (() => {});
   }
 
   setText = text => {
@@ -27,9 +29,23 @@ class Button {
     }
   };
 
+  isInside = (x, y) => {
+    const by = this.pos.y - this.positioning[1] * this.height;
+    const bx = this.pos.x - this.positioning[0] * this.width;
+
+    return (
+      x >= bx && x <= bx + this.width && (y >= by && y <= by + this.height)
+    );
+  };
+
   event = (mouse, keyboard) => {
-    if (keyboard.keyDown("ArrowUp")) {
-      console.log("oh ye");
+    if (this.isInside(mouse.x, mouse.y)) {
+      if (mouse.left.clicked) {
+        this.onAction();
+      }
+      this.bloat = Math.min(1.05, this.bloat * 1.02);
+    } else {
+      this.bloat = Math.max(1, this.bloat * 0.98);
     }
   };
 
@@ -40,7 +56,8 @@ class Button {
     ctx.fillStyle = this.bgColor;
     const y = this.pos.y - this.positioning[1] * this.height;
     const x = this.pos.x - this.positioning[0] * this.width;
-    ctx.fillRect(x, y, this.width, this.height);
+    const bX = this.width * (this.bloat - 1);
+    ctx.fillRect(x - bX, y - bX, this.width + 2 * bX, this.height + 2 * bX);
 
     ctx.fillStyle = this.fgColor;
     ctx.textAlign = "center";

@@ -3,12 +3,11 @@ export default class Background {
     this.game = game;
   }
 
-  update = () => {}
+  update = () => {};
 
   render = ctx => {
     const mbs = this.game.mapBlockSize;
     const ms = this.game.mapSize;
-
 
     ctx.fillStyle = "#EEE";
 
@@ -23,7 +22,7 @@ export default class Background {
 
     ctx.fillRect(0, 0, ms.width * mbs, 1);
     ctx.fillRect(0, 0, 1, ms.height * mbs);
-    ctx.fillRect(0, (ms.height * mbs) - 1, ms.width * mbs, 1);
-    ctx.fillRect((ms.width * mbs) - 1, 0, 1, ms.height * mbs);
+    ctx.fillRect(0, ms.height * mbs - 1, ms.width * mbs, 1);
+    ctx.fillRect(ms.width * mbs - 1, 0, 1, ms.height * mbs);
   };
 }
