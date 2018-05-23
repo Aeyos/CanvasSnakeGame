@@ -1,6 +1,5 @@
 import React from "react";
 import { render } from "react-dom";
-import Hello from "./Hello";
 import Canvas from "./canvas";
 
 const styles = {
@@ -10,8 +9,13 @@ const styles = {
 
 const App = () => (
   <div style={styles}>
-    <Hello name="CodeSandbox" />
-    <h2>Start editing to {"\u2728"}</h2>
+    <h1>
+      Canvas{" "}
+      <span role="img" aria-label="snake">
+        🐍
+      </span>{" "}
+      Game
+    </h1>
     <Canvas />
   </div>
 );

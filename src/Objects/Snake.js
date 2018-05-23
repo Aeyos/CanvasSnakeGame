@@ -19,14 +19,30 @@ export default class Snake {
   moveLeft = () => this.move(this.segments[0][0] - 1, this.segments[0][1]);
 
   move = (x, y) => {
-    const o = this.scene.objectAt(x, y);
+    let ox = x;
+    let oy = y;
+    const ms = this.scene.getMapSize();
+
+    if (x < 0) {
+      ox = ms.width - 1;
+    } else if (x >= ms.width) {
+      ox = 0;
+    }
+
+    if (y < 0) {
+      oy = ms.height - 1;
+    } else if (y >= ms.height) {
+      oy = 0;
+    }
+
+    const o = this.scene.objectAt(ox, oy);
 
     if (o === "Food") {
-      this.eat(x, y);
+      this.eat(ox, oy);
     } else if (o === "Snake") {
       this.game.gameOver();
     } else {
-      this.slither(x, y);
+      this.slither(ox, oy);
     }
   };
 
@@ -36,18 +52,6 @@ export default class Snake {
   };
 
   slither = (x, y) => {
-    if (x < 0) {
-      x = this.scene.getMapSize().width - 1;
-    } else if (x >= this.scene.getMapSize().width) {
-      x = 0;
-    }
-
-    if (y < 0) {
-      y = this.scene.getMapSize().height - 1;
-    } else if (y >= this.scene.getMapSize().height) {
-      y = 0;
-    }
-
     this.segments.pop();
     this.segments = [[x, y], ...this.segments];
   };

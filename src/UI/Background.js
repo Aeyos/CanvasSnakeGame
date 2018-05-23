@@ -11,7 +11,6 @@ export default class Background {
   update = () => {};
 
   render = ctx => {
-
     ctx.fillStyle = "#EEE";
 
     for (var i = 1; i < this.ms.width * this.mbs; i += this.mbs) {

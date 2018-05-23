@@ -3,6 +3,7 @@ import Snake from "../Objects/Snake";
 import Food from "../Objects/Food";
 import Points from "../Objects/Points";
 import GameMap from "../Objects/GameMap";
+import Time from '../Objects/Time';
 
 class Game {
   constructor(game) {
@@ -10,15 +11,16 @@ class Game {
     this.snake = new Snake(game, this);
     this.food = new Food(game, this);
     this.points = new Points(game, this);
+    this.time = new Time(game, this);
     this.map = new GameMap(game, this);
 
     this.food.add();
 
     this.objects = {
-      0: [this.background, this.map],
+      0: [this.map],
       1: [this.food],
       2: [this.snake],
-      3: [this.points]
+      3: [this.points, this.time]
     };
   }
 
